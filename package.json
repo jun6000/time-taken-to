@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "tt": "./index.js"
+    "ttt": "./index.js"
   },
   "type": "module",
   "scripts": {
