@@ -48,7 +48,7 @@ exec(cmd, (err, stdout, stderr) => {
     const execTime = stopTime - startTime;      // Execution time measured in milliseconds
 
     if (execTime > 999)
-        console.log(`Time taken: ${ parseFloat((execTime / 1000).toFixed(opts.roundTo)) } s`);
+        console.log(`Time taken: ${ parseFloat((execTime / 1000).toFixed(opts.roundTo ? opts.roundTo : 6)) } s`);
     else
-        console.log(`Time taken: ${ parseFloat(execTime.toFixed(opts.roundTo)) } ms`);
+        console.log(`Time taken: ${ parseFloat(execTime.toFixed(opts.roundTo ? opts.roundTo : 6)) } ms`);
 });
