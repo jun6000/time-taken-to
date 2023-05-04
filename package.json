@@ -12,5 +12,8 @@
   },
   "keywords": [],
   "author": "Arjun Vishanth <arjunvishanth@gmail.com> (https://github.com/jun6000)",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^10.0.1"
+  }
 }
