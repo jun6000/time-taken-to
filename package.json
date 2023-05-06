@@ -1,10 +1,11 @@
 {
   "name": "time-taken-to",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "",
   "main": "index.js",
   "bin": {
-    "ttt": "./index.js"
+    "ttt": "./index.js",
+    "time-taken-to": "./index.js"
   },
   "type": "module",
   "scripts": {
@@ -14,6 +15,7 @@
   "author": "Arjun Vishanth <arjunvishanth@gmail.com> (https://github.com/jun6000)",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^5.2.0",
     "commander": "^10.0.1"
   }
 }

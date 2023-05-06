@@ -3,13 +3,18 @@
 import { performance } from "perf_hooks";
 import { exec } from "child_process";
 import { program } from "commander";
+import chalk from "chalk";
 
 // Get command-line options and arguments
 
 program
-    .option("-r, --round-to <count>", "Round the result to <count> digits.");
-
-program.parse(process.argv);
+    .option("-r, --round-to <count>", "Round the result to <count> digits.")
+    .option("-s, --show-stdout", "Show stdout from the command being run.")
+    .usage(`[options] command_string
+       ttt [options] command_string`)
+    .description(`Measures time taken to execute the command specified in command_string and displays it.
+If not installed globally on system can also be executed using 'npx time-taken-to'.`)
+    .parse(process.argv);
 
 // Handle options
 
@@ -24,10 +29,15 @@ if (opts.roundTo) {
 
 // Handle command to test
 
-const cmd = program.args.join(' ');
+if (program.args.length > 1) {
+    console.error(`error: Invalid argument(s) specified`);
+    process.exit(0);
+}
+
+const cmd = program.args[0];
 
 if (!cmd) {
-    console.error(`error: Specify a command as command-line argument to measure its execution time`);
+    console.error(`error: Specify a command as command-line string argument to measure its execution time`);
     process.exit(0);
 }
 
@@ -35,7 +45,7 @@ if (!cmd) {
 
 const startTime = performance.now();
 
-exec(cmd, (err, stdout, stderr) => {
+const subShell = exec(cmd, (err, stdout, stderr) => {
     const stopTime = performance.now();
 
     if (err) {
@@ -43,12 +53,13 @@ exec(cmd, (err, stdout, stderr) => {
         process.exit(1);
     }
 
-    console.log(stdout);                        // Log the output if any to stdout
+    if (opts.showStdout)
+        console.log(stdout);                        // Log the output if any to stdout
 
     const execTime = stopTime - startTime;      // Execution time measured in milliseconds
 
     if (execTime > 999)
-        console.log(`Time taken: ${ parseFloat((execTime / 1000).toFixed(opts.roundTo ? opts.roundTo : 6)) } s`);
+        console.log(chalk.cyan(`Time taken: ${ parseFloat((execTime / 1000).toFixed(opts.roundTo ? opts.roundTo : 6)) } s`));
     else
-        console.log(`Time taken: ${ parseFloat(execTime.toFixed(opts.roundTo ? opts.roundTo : 6)) } ms`);
+        console.log(chalk.cyan(`Time taken: ${ parseFloat(execTime.toFixed(opts.roundTo ? opts.roundTo : 6)) } ms`));
 });
