@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
-import { performance } from "perf_hooks";
-import { exec } from "child_process";
+import { performance } from "node:perf_hooks";
+import { exec } from "node:child_process";
 import { program } from "commander";
 import chalk from "chalk";
 
@@ -10,6 +10,7 @@ import chalk from "chalk";
 program
     .option("-r, --round-to <count>", "Round the result to <count> digits.")
     .option("-s, --show-stdout", "Show stdout from the command being run.")
+    .option("-i, --iterations <count>", "Run for <count> iterations and return the average for a more accurate value.")
     .usage(`[options] command_string
        ttt [options] command_string`)
     .description(`Measures time taken to execute the command specified in command_string and displays it.
@@ -24,7 +25,7 @@ Examples:
         This measures the time taken by the "ls -s" command. Enclose the command string in quotes to ensure options are parsed properly.
     
 For more information visit the github: https://github.com/jun6000/time-take-to`)
-    .version("v1.3.0", "-v, --version", "Display the current version of time-taken-to.")
+    .version("v1.4.0", "-v, --version", "Display the current version of time-taken-to.")
     .parse(process.argv);
 
 // Handle options
@@ -36,6 +37,13 @@ if (opts.roundTo) {
 
     if (/[^0-9]/.test(roundTo) || parseFloat(roundTo) > 15)
         program.error(`error: option '-r, --round-to <count>' argument invalid (whole numbers <=15 only)`);
+}
+
+if (opts.iterations) {
+    const iterations = opts.iterations;
+
+    if (/[^0-9]/.test(iterations) || parseFloat(iterations) > 100 || parseFloat(iterations) === 0)
+        program.error(`error: option '-i, --iterations <count>' argument invalid (natural numbers <=100 only)`);
 }
 
 // Handle command to test
@@ -52,25 +60,49 @@ if (!cmd) {
     process.exit(0);
 }
 
+// Promisify the exec method to execute synchronously
+
+const execPromise = async (cmd) => {
+    return new Promise((resolve, reject) => {
+        exec(cmd, (err, stdout) => {
+            if (err)
+                reject(err);
+            resolve(stdout);
+        });
+    });
+}
+
 // Measure execution time
 
-const startTime = performance.now();
+const iterations = opts.iterations ? parseFloat(opts.iterations) : 1;
 
-const subShell = exec(cmd, (err, stdout, stderr) => {
-    const stopTime = performance.now();
+let execTimeAvg = 0;
 
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
+for (let i = 0; i < iterations; i++) {
+    const startTime = performance.now();
 
-    if (opts.showStdout)
-        console.log(stdout);                        // Log the output if any to stdout
+    await execPromise(cmd)
+        .then(async (stdout) => {
+            const stopTime = performance.now();
+            const execTime = stopTime - startTime;  // Execution time measured in milliseconds
+            execTimeAvg += execTime;
 
-    const execTime = stopTime - startTime;          // Execution time measured in milliseconds
+            if (i === 0 && opts.showStdout)
+                console.log(stdout);                // Log the output if any to stdout (only once)
+        })
+        .catch((err) => {
+            console.error(err);
+            process.exit(1);
+        });
+}
 
-    if (execTime > 999)
-        console.log(chalk.cyan(`Time taken: ${ parseFloat((execTime / 1000).toFixed(opts.roundTo ? opts.roundTo : 6)) } s`));
-    else
-        console.log(chalk.cyan(`Time taken: ${ parseFloat(execTime.toFixed(opts.roundTo ? opts.roundTo : 6)) } ms`));
-});
+// Calculate average execution time
+
+execTimeAvg /= iterations;
+
+// Log results
+
+if (execTimeAvg > 999)
+    console.log(chalk.cyan(`Time taken: ${ parseFloat((execTimeAvg / 1000).toFixed(opts.roundTo ? opts.roundTo : 6)) } s`));
+else
+    console.log(chalk.cyan(`Time taken: ${ parseFloat(execTimeAvg.toFixed(opts.roundTo ? opts.roundTo : 6)) } ms`));
