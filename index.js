@@ -14,6 +14,17 @@ program
        ttt [options] command_string`)
     .description(`Measures time taken to execute the command specified in command_string and displays it.
 If not installed globally on system can also be executed using 'npx time-taken-to'.`)
+    .addHelpText("after", `
+Examples:
+
+    $ ttt ls -s
+        This measures the time taken by the "ls" command and displays the stdout.
+    
+    $ ttt "ls -s"
+        This measures the time taken by the "ls -s" command. Enclose the command string in quotes to ensure options are parsed properly.
+    
+For more information visit the github: https://github.com/jun6000/time-take-to`)
+    .version("v1.3.0", "-v, --version", "Display the current version of time-taken-to.")
     .parse(process.argv);
 
 // Handle options
@@ -56,7 +67,7 @@ const subShell = exec(cmd, (err, stdout, stderr) => {
     if (opts.showStdout)
         console.log(stdout);                        // Log the output if any to stdout
 
-    const execTime = stopTime - startTime;      // Execution time measured in milliseconds
+    const execTime = stopTime - startTime;          // Execution time measured in milliseconds
 
     if (execTime > 999)
         console.log(chalk.cyan(`Time taken: ${ parseFloat((execTime / 1000).toFixed(opts.roundTo ? opts.roundTo : 6)) } s`));
