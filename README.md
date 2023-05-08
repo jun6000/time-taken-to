@@ -1,5 +1,5 @@
 # time-taken-to
-Tells you the execution time taken by your command.
+A simple idea I came up with while working on something else. Seemed like a fun mini-project, so decided to package it xD
 
 ![ttt-demo](https://imgur.com/kviP5Cd.gif)
 ## Installation
