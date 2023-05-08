@@ -17,5 +17,21 @@
   "dependencies": {
     "chalk": "^5.2.0",
     "commander": "^10.0.1"
-  }
+  },
+  "keywords": [
+    "nodejs",
+    "time",
+    "performance",
+    "async",
+    "timer",
+    "promise",
+    "speed",
+    "execution",
+    "async-await",
+    "hrtime",
+    "timer-application",
+    "execution-time",
+    "measure-time",
+    "time-taken"
+  ]
 }
