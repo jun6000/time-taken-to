@@ -1,6 +1,6 @@
 {
   "name": "time-taken-to",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -11,7 +11,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "nodejs",
+    "time",
+    "performance",
+    "async",
+    "timer",
+    "promise",
+    "speed",
+    "execution",
+    "async-await",
+    "hrtime",
+    "timer-application",
+    "execution-time",
+    "measure-time",
+    "time-taken"
+  ],
   "author": "Arjun Vishanth <arjunvishanth@gmail.com> (https://github.com/jun6000)",
   "license": "ISC",
   "dependencies": {
