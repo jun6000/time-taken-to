@@ -1,7 +1,7 @@
 # time-taken-to
 A simple idea I came up with while working on something else. Seemed like a fun mini-project, so decided to package it xD
 
-![ttt-demo](https://imgur.com/kviP5Cd.gif)
+![ttt-demo](https://imgur.com/fTUydrA.gif)
 ## Installation
 ```
 npm i -g time-taken-to
