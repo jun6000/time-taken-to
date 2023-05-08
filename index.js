@@ -25,7 +25,7 @@ Examples:
         This measures the time taken by the "ls -s" command. Enclose the command string in quotes to ensure options are parsed properly.
     
 For more information visit the github: https://github.com/jun6000/time-take-to`)
-    .version("v1.4.0", "-v, --version", "Display the current version of time-taken-to.")
+    .version("v1.4.1", "-v, --version", "Display the current version of time-taken-to.")
     .parse(process.argv);
 
 // Handle options
