@@ -11,6 +11,8 @@ This installs the binary to PATH after which it can be accessed either using `ti
 Alternatively, can be run using `npx` without local installation.
 
 ## Usage
+> ⚠️ **If your command is interactive (requires runtime input)**, time-taken-to will stall and not do anything. This case is currently not handled and will be fixed in a later patch.  
+> 🟢 Hence if interactive, hard-code your command.
 ```
 time-taken-to [OPTIONS] <your_command>
 ```
